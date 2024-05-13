@@ -30,8 +30,10 @@ jobs:
       - run:
           name: Terraform Init and Plan
           command: |
+            cd env
             terraform init
             terraform plan
+
 
 
   terraform_apply:
@@ -43,12 +45,16 @@ jobs:
       # Initialize Terraform
       - run:
           name: Terraform Init
-          command: terraform init
+          command: |
+            cd env
+            terraform init
 
       # Apply Terraform changes
       - run:
           name: Terraform Apply
-          command: terraform apply -auto-approve
+          command: |
+            cd env
+            terraform apply -auto-approve
 
   terraform_destroy:
     docker:
@@ -59,12 +65,16 @@ jobs:
       # Initialize Terraform
       - run:
           name: Terraform Init
-          command: terraform init
+          command: |
+            cd env
+            terraform init
 
       # Destroy Terraform resources
       - run:
           name: Terraform Destroy
-          command: terraform destroy -auto-approve
+          command: |
+            cd env
+            terraform destroy -auto-approve
 
 workflows:
   version: 2
