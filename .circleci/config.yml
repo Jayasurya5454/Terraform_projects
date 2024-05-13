@@ -1,0 +1,90 @@
+version: 2.1
+
+jobs:
+  terraform_init:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+
+      # Install AWS CLI
+      - run:
+          name: Install AWS CLI
+          command: |
+            apk update
+            apk add --no-cache aws-cli
+      # Configure AWS CLI with access key and secret key
+      - run:
+          name: Configure AWS CLI
+          command: |
+            aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+            aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+
+  terraform_plan:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+
+      # Initialize Terraform
+      - run:
+          name: Terraform Init and Plan
+          command: |
+            terraform init
+            terraform plan
+
+
+  terraform_apply:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+
+      # Initialize Terraform
+      - run:
+          name: Terraform Init
+          command: terraform init
+
+      # Apply Terraform changes
+      - run:
+          name: Terraform Apply
+          command: terraform apply -auto-approve
+
+  terraform_destroy:
+    docker:
+      - image: hashicorp/terraform:light
+    steps:
+      - checkout
+
+      # Initialize Terraform
+      - run:
+          name: Terraform Init
+          command: terraform init
+
+      # Destroy Terraform resources
+      - run:
+          name: Terraform Destroy
+          command: terraform destroy -auto-approve
+
+workflows:
+  version: 2
+  terraform_flow:
+    jobs:
+      - terraform_init
+      - terraform_plan:
+          requires:
+            - terraform_init
+      - hold1:
+          type: approval
+          requires:
+            - terraform_plan
+      - terraform_apply:
+          requires:
+            - hold1
+      - hold:
+          type: approval
+          requires:
+            - terraform_plan
+      - terraform_destroy:
+          requires:
+            - hold
