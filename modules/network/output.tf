@@ -10,3 +10,7 @@ value = aws_subnet.tf-aws-js-sb-2.id
 
   
 }
+output "vpc_id" {
+    value = aws_vpc.tf-aws-js-vpc.id
+}
+  
