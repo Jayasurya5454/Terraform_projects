@@ -5,6 +5,7 @@ resource "aws_subnet" "tf-aws-js-sb-1" {
     tags = {
       Name="tf-aws-js-sb-1"
     }
+    depends_on = [ aws_vpc.tf-aws-js-vpc ]
 }
 resource "aws_subnet" "tf-aws-js-sb-2" {
     availability_zone = var.az_2
@@ -13,5 +14,6 @@ resource "aws_subnet" "tf-aws-js-sb-2" {
     tags = {
       Name="tf-aws-js-sb-2"
     }
+    depends_on = [ aws_vpc.tf-aws-js-vpc ]
   
 }
