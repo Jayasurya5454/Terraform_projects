@@ -21,4 +21,18 @@ variable "subnet_id_2" {
   
   
 }
+variable "subnet_id_3" {
+
+    type = string
+  
+  
+}
+variable "subnet_id_4" {
+
+    type = string
+  
+  
+}
+
+
 
